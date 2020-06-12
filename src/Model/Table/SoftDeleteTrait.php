@@ -1,4 +1,5 @@
 <?php
+
 namespace SoftDelete\Model\Table;
 
 use Cake\ORM\RulesChecker;
@@ -6,7 +7,8 @@ use Cake\Datasource\EntityInterface;
 use SoftDelete\Error\MissingColumnException;
 use SoftDelete\ORM\Query;
 
-trait SoftDeleteTrait {
+trait SoftDeleteTrait
+{
 
     /**
      * Get the configured deletion field
@@ -22,9 +24,10 @@ trait SoftDeleteTrait {
             $field = 'deleted';
         }
 
-        if ($this->schema()->column($field) === null) {
+        if ($this->getSchema()->getColumn($field) === null) {
             throw new MissingColumnException(
-                __('Configured field `{0}` is missing from the table `{1}`.',
+                __(
+                    'Configured field `{0}` is missing from the table `{1}`.',
                     $field,
                     $this->alias()
                 )
@@ -36,7 +39,7 @@ trait SoftDeleteTrait {
 
     public function query()
     {
-        return new Query($this->connection(), $this);
+        return new Query($this->getConnection(), $this);
     }
 
     /**
@@ -57,7 +60,7 @@ trait SoftDeleteTrait {
             return false;
         }
 
-        $primaryKey = (array)$this->primaryKey();
+        $primaryKey = (array) $this->getPrimaryKey();
         if (!$entity->has($primaryKey)) {
             $msg = 'Deleting requires all primary key values.';
             throw new \InvalidArgumentException($msg);
@@ -82,7 +85,7 @@ trait SoftDeleteTrait {
         );
 
         $query = $this->query();
-        $conditions = (array)$entity->extract($primaryKey);
+        $conditions = (array) $entity->extract($primaryKey);
         $statement = $query->update()
             ->set([$this->getSoftDeleteField() => date('Y-m-d H:i:s')])
             ->where($conditions)
@@ -122,12 +125,12 @@ trait SoftDeleteTrait {
      */
     public function hardDelete(EntityInterface $entity)
     {
-        if(!$this->delete($entity)) {
+        if (!$this->delete($entity)) {
             return false;
         }
-        $primaryKey = (array)$this->primaryKey();
+        $primaryKey = (array) $this->getPrimaryKey();
         $query = $this->query();
-        $conditions = (array)$entity->extract($primaryKey);
+        $conditions = (array) $entity->extract($primaryKey);
         $statement = $query->delete()
             ->where($conditions)
             ->execute();
@@ -142,7 +145,7 @@ trait SoftDeleteTrait {
 
     /**
      * Hard deletes all records that were soft deleted before a given date.
-     * @param \DateTime $until Date until which soft deleted records must be hard deleted.
+     * @param \DateTime $until Date until witch soft deleted records must be hard deleted.
      * @return int number of affected rows.
      */
     public function hardDeleteAll(\Datetime $until)

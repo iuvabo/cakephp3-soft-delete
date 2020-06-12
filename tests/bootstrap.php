@@ -1,4 +1,5 @@
 <?php
+
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -27,7 +28,7 @@ $loader = new \Cake\Core\ClassLoader;
 $loader->register();
 $loader->addNamespace('Cake\Test\Fixture', ROOT . '/vendor/cakephp/cakephp/tests/Fixture');
 require_once CORE_PATH . 'config/bootstrap.php';
-date_default_timezone_set('UTC');
+date_default_timezone_set('Europe/Berlin');
 mb_internal_encoding('UTF-8');
 Configure::write('debug', true);
 Configure::write('App', [
@@ -49,7 +50,7 @@ Configure::write('App', [
 ]);
 
 Configure::write('Session', [
-    'defaults' => 'php'
+    'defaults' => 'php',
 ]);
 
 Cache::config([
