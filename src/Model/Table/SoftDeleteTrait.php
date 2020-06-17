@@ -29,7 +29,7 @@ trait SoftDeleteTrait
                 __(
                     'Configured field `{0}` is missing from the table `{1}`.',
                     $field,
-                    $this->alias()
+                    $this->getAlias()
                 )
             );
         }
