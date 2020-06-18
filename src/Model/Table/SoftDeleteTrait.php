@@ -88,6 +88,7 @@ trait SoftDeleteTrait
         $conditions = (array) $entity->extract($primaryKey);
         $statement = $query->update()
             ->set([$this->getSoftDeleteField() => date('Y-m-d H:i:s')])
+            ->set(["modified" => date('Y-m-d H:i:s')])
             ->where($conditions)
             ->execute();
 
